@@ -26,7 +26,7 @@ document.getElementById("join-form").addEventListener("submit", (e) => {
 
     if (input.value) {
       socket.emit("chat message", input.value);
-      appendMessage(nickname, input.value);
+      appendMessage(`${nickname}: ${input.value}`, "text-end");
       input.value = "";
     }
   });
@@ -43,7 +43,7 @@ document.getElementById("join-form").addEventListener("submit", (e) => {
   });
 
   socket.on("chat message", ({ nickname, msg }) => {
-    appendMessage(nickname, msg);
+    appendMessage(`${nickname}: ${msg}`);
   });
 
   socket.on("user connected", ({ id, nickname }) => {
@@ -52,20 +52,23 @@ document.getElementById("join-form").addEventListener("submit", (e) => {
     item.textContent = nickname;
     item.dataset.id = id;
     onlineUsers.appendChild(item);
+
+    appendMessage(`${nickname} connected`, "text-center");
   });
 
   socket.on("user disconnected", ({ id, nickname }) => {
     document.querySelector(`#online-users>li[data-id='${id}']`).remove();
+
+    appendMessage(`${nickname} disconnected`, "text-center");
   });
 
-  function appendMessage(nickname2, msg) {
+  function appendMessage(msg, additionalClassList = null) {
     const item = document.createElement("li");
     item.classList.add("list-group-item");
 
-    if (nickname === nickname2) {
-      item.classList.add("text-end");
-    }
-    item.textContent = `${nickname2}: ${msg}`;
+    item.classList.add(additionalClassList);
+
+    item.textContent = msg;
     messages.appendChild(item);
     messages.scrollTop = messages.scrollHeight;
   }
