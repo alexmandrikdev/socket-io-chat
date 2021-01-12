@@ -1,0 +1,8 @@
+#online-users {
+  min-height: 100%;
+}
+
+#messages {
+  height: calc(100vh - 55px);
+  overflow: auto;
+}
