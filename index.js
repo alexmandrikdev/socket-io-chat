@@ -17,8 +17,6 @@ io.on("connection", (socket) => {
     nickname: socket.handshake.query.nickname,
   });
 
-  console.log(onlineUsers);
-
   io.to(socket.id).emit("connection established", onlineUsers);
 
   socket.broadcast.emit("user connected", {
